@@ -1,0 +1,1 @@
+Контракти RecipeRepository, MealPlanRepository та ShoppingListRepository відокремлюють бізнес-логіку від сховища. Реалізації в пам’яті містяться в lib/data/repositories/. Екрани працюють через сервіси.

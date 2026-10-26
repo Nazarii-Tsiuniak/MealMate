@@ -1,0 +1,137 @@
+import '../../models/recipe.dart';
+import '../../models/recipe_ingredient.dart';
+
+/// Тимчасові рецепти. Калорійність орієнтовна, на одну порцію.
+abstract final class RecipeDemoData {
+  static const recipes = [
+    Recipe(
+      id: 'omelet',
+      name: 'Омлет із зеленню',
+      description: 'Ніжний омлет зі свіжою зеленню для легкого сніданку.',
+      category: RecipeCategory.breakfast,
+      preparationMinutes: 15,
+      calories: 320,
+      servings: 2,
+      ingredients: [
+        RecipeIngredient(name: 'Яйця', quantity: 3, unit: 'шт.'),
+        RecipeIngredient(name: 'Молоко', quantity: 100, unit: 'мл'),
+        RecipeIngredient(name: 'Зелень', quantity: 20, unit: 'г'),
+        RecipeIngredient(name: 'Сіль', note: 'за смаком'),
+      ],
+      preparationSteps: [
+        'Помийте й дрібно наріжте зелень.',
+        'Збийте яйця з молоком і сіллю, додайте зелень.',
+        'Вилийте суміш на розігріту сковороду з антипригарним покриттям.',
+        'Готуйте під кришкою на слабкому вогні 5–7 хвилин до готовності.',
+      ],
+    ),
+    Recipe(
+      id: 'potatoes',
+      name: 'Картопляне пюре',
+      description: 'М’яке домашнє пюре з молоком і вершковим маслом.',
+      category: RecipeCategory.lunch,
+      preparationMinutes: 35,
+      calories: 410,
+      servings: 3,
+      ingredients: [
+        RecipeIngredient(name: 'Картопля', quantity: 600, unit: 'г'),
+        RecipeIngredient(name: 'Молоко', quantity: 150, unit: 'мл'),
+        RecipeIngredient(name: 'Вершкове масло', quantity: 30, unit: 'г'),
+        RecipeIngredient(name: 'Сіль', note: 'за смаком'),
+      ],
+      preparationSteps: [
+        'Очистьте картоплю, помийте та наріжте однаковими шматочками.',
+        'Залийте водою, посоліть і варіть 20–25 хвилин до м’якості.',
+        'Злийте воду та розімніть картоплю.',
+        'Додайте масло й тепле молоко, перемішайте до однорідності.',
+      ],
+    ),
+    Recipe(
+      id: 'salad',
+      name: 'Овочевий салат',
+      description: 'Свіжі сезонні овочі з легкою оливковою заправкою.',
+      category: RecipeCategory.salad,
+      preparationMinutes: 10,
+      calories: 220,
+      servings: 2,
+      ingredients: [
+        RecipeIngredient(name: 'Помідори', quantity: 200, unit: 'г'),
+        RecipeIngredient(name: 'Огірки', quantity: 200, unit: 'г'),
+        RecipeIngredient(name: 'Листя салату', quantity: 50, unit: 'г'),
+        RecipeIngredient(name: 'Оливкова олія', quantity: 20, unit: 'мл'),
+        RecipeIngredient(name: 'Сіль', note: 'за смаком'),
+      ],
+      preparationSteps: [
+        'Ретельно помийте овочі та обсушіть листя салату.',
+        'Наріжте помідори й огірки, порвіть листя руками.',
+        'З’єднайте овочі в мисці, додайте олію та сіль.',
+        'Обережно перемішайте та подавайте одразу.',
+      ],
+    ),
+    Recipe(
+      id: 'soup',
+      name: 'Курячий суп',
+      description: 'Легкий теплий суп із куркою, картоплею та морквою.',
+      category: RecipeCategory.dinner,
+      preparationMinutes: 45,
+      calories: 280,
+      servings: 4,
+      ingredients: [
+        RecipeIngredient(name: 'Куряче філе', quantity: 300, unit: 'г'),
+        RecipeIngredient(name: 'Картопля', quantity: 250, unit: 'г'),
+        RecipeIngredient(name: 'Морква', quantity: 100, unit: 'г'),
+        RecipeIngredient(name: 'Цибуля', quantity: 1, unit: 'шт.'),
+        RecipeIngredient(name: 'Вода', quantity: 1500, unit: 'мл'),
+        RecipeIngredient(name: 'Сіль', note: 'за смаком'),
+      ],
+      preparationSteps: [
+        'Наріжте філе й овочі невеликими шматочками.',
+        'Залийте курку водою, доведіть до кипіння та зніміть піну.',
+        'Варіть 15 хвилин, додайте картоплю, моркву й цибулю.',
+        'Посоліть і варіть ще 20 хвилин до повної готовності курки та овочів.',
+      ],
+    ),
+    Recipe(
+      id: 'syrnyky',
+      name: 'Сирники',
+      description: 'Рум’яні сирники з кисломолочного сиру для затишного ранку.',
+      category: RecipeCategory.dessert,
+      preparationMinutes: 25,
+      calories: 350,
+      servings: 2,
+      ingredients: [
+        RecipeIngredient(name: 'Кисломолочний сир', quantity: 300, unit: 'г'),
+        RecipeIngredient(name: 'Яйце', quantity: 1, unit: 'шт.'),
+        RecipeIngredient(name: 'Борошно', quantity: 50, unit: 'г'),
+        RecipeIngredient(name: 'Цукор', quantity: 20, unit: 'г'),
+        RecipeIngredient(name: 'Олія', quantity: 10, unit: 'мл'),
+      ],
+      preparationSteps: [
+        'Розімніть сир виделкою, додайте яйце та цукор.',
+        'Всипте борошно та перемішайте до м’якого тіста.',
+        'Сформуйте невеликі сирники.',
+        'Смажте на олії на помірному вогні по 3–4 хвилини з кожного боку.',
+      ],
+    ),
+    Recipe(
+      id: 'oatmeal',
+      name: 'Вівсяна каша',
+      description: 'Тепла вівсяна каша на молоці з ягодами.',
+      category: RecipeCategory.breakfast,
+      preparationMinutes: 12,
+      servings: 1,
+      ingredients: [
+        RecipeIngredient(name: 'Вівсяні пластівці', quantity: 50, unit: 'г'),
+        RecipeIngredient(name: 'Молоко', quantity: 200, unit: 'мл'),
+        RecipeIngredient(name: 'Ягоди', quantity: 50, unit: 'г'),
+        RecipeIngredient(name: 'Мед', quantity: 10, unit: 'г'),
+      ],
+      preparationSteps: [
+        'Нагрійте молоко в невеликій каструлі.',
+        'Додайте пластівці, готуйте 5–7 хвилин, помішуючи.',
+        'Зніміть кашу з вогню та дайте їй трохи охолонути.',
+        'Додайте мед і помиті ягоди перед подачею.',
+      ],
+    ),
+  ];
+}

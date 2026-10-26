@@ -1,0 +1,1 @@
+RecipeService — CRUD рецептів; MealPlanService — план харчування; ShoppingListService — формування й керування покупками та сповіщення UI. ShoppingAggregation об’єднує сумісні інгредієнти. SQLite та реальної авторизації немає.
