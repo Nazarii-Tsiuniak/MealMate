@@ -1,4 +1,3 @@
-/// Інгредієнт рецепта; без залежностей від UI або бази даних.
 class RecipeIngredient {
   static const units = ['г', 'кг', 'мл', 'л', 'шт'];
   const RecipeIngredient({

@@ -1,4 +1,3 @@
-"""Явне, атомарне наповнення наявного акаунта без зміни його рецептів."""
 import argparse
 from dataclasses import dataclass
 import os
@@ -30,7 +29,7 @@ def seed_id(user_id: str, key: str) -> str:
 
 def seed_recipes(session, user_email: str, *, dry_run: bool = False) -> SeedResult:
     email = str(TypeAdapter(EmailStr).validate_python(user_email.strip())).casefold()
-    # Усі рецепти валідуються до будь-якого запису.
+
     prepared = [(entry, entry.payload()) for entry in RECIPES]
     repository = RecipeRepository(session)
     created = skipped = 0
@@ -48,14 +47,14 @@ def seed_recipes(session, user_email: str, *, dry_run: bool = False) -> SeedResu
                 skipped += 1
                 continue
             if normalize_name(payload.name) in existing_names:
-                # Користувацький рецепт з такою назвою ніколи не перезаписуємо.
+
                 skipped += 1
                 continue
             if not dry_run:
                 recipe = Recipe(id=recipe_id, user_id=user.id,
                     **payload.model_dump(exclude={"ingredients", "preparation_steps"}))
                 session.add(recipe)
-                # Наявний репозиторій зберігає зв’язки, інгредієнти й порядок кроків.
+
                 repository.save(user.id, payload, normalize_name, recipe)
             existing_names.add(normalize_name(payload.name))
             created += 1

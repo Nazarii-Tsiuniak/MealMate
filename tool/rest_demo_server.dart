@@ -5,7 +5,6 @@ import 'package:mealmate/data/demo/recipe_demo_data.dart';
 import 'package:mealmate/demo/rest/recipe_json.dart';
 import 'package:mealmate/models/recipe.dart';
 
-/// Локальний навчальний сервер. Лише loopback, без залежностей та авторизації.
 Future<void> main(List<String> arguments) async {
   var port = 8080, delayMs = 0;
   var dataPath = '.dart_tool/rest_demo/recipes.json';
@@ -50,7 +49,6 @@ Future<void> main(List<String> arguments) async {
     'JSON storage: ${file.absolute.path}; delay: $delayMs ms. Stop: Ctrl+C.',
   );
   var sequence = 0;
-  // Послідовна обробка записів запобігає втраті оновлень JSON-файлу.
   await for (final request in server) {
     try {
       if (delayMs > 0) {

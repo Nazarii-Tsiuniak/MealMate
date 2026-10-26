@@ -5,7 +5,6 @@ import '../../models/recipe.dart';
 import 'recipe_api_client.dart';
 import 'recipe_json.dart';
 
-/// Окрема лабораторна демонстрація. Дані не потрапляють в основний каталог.
 class RestDemoScreen extends StatefulWidget {
   const RestDemoScreen({required this.client, super.key});
   final RecipeApiClient client;
@@ -30,7 +29,6 @@ class _RestDemoScreenState extends State<RestDemoScreen> {
   @override
   void dispose() {
     _editor.dispose();
-    // Клієнтом володіє окрема точка входу, тести можуть передати mock.
     super.dispose();
   }
 

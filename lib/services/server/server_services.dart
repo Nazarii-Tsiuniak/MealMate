@@ -176,7 +176,6 @@ class ServerShoppingService extends ShoppingListService {
     required double? quantity,
     required String? unit,
   }) => throw UnsupportedError('Використайте async');
-  // Синхронні зміни в серверному режимі заборонені.
   @override
   void setPurchased(String id, bool purchased) =>
       throw UnsupportedError('Використайте async');

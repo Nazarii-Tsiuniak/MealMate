@@ -11,7 +11,6 @@ enum RecipeCategory {
   final String label;
 }
 
-/// Дані рецепта, незалежні від Flutter та способу зберігання.
 class Recipe {
   const Recipe({
     required this.id,
@@ -29,10 +28,8 @@ class Recipe {
   final String name;
   final String description;
   final RecipeCategory category;
-  // Зберігаємо наявну назву поля, щоб не ламати каталог.
   final int preparationMinutes;
 
-  /// Орієнтовні ккал на одну порцію; null — калорійність не задана.
   final int? calories;
   final int? servings;
   final List<RecipeIngredient> ingredients;

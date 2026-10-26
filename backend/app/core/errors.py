@@ -22,7 +22,7 @@ def install_error_handlers(app: FastAPI) -> None:
 
     @app.exception_handler(RequestValidationError)
     async def validation_error(request: Request, exc: RequestValidationError):
-        # Не віддаємо input/ctx: вони можуть містити пароль або внутрішній об’єкт.
+
         errors = [{"loc": list(e["loc"]), "type": e["type"], "msg": "Перевірте значення поля"} for e in exc.errors()]
         status = 400 if any(e["type"] == "json_invalid" for e in exc.errors()) else 422
         return JSONResponse(status_code=status, content={"detail": errors})
@@ -34,6 +34,6 @@ def install_error_handlers(app: FastAPI) -> None:
 
     @app.exception_handler(Exception)
     async def internal_error(request: Request, exc: Exception):
-        # Не журналюємо тіло запиту, пароль або JWT.
+
         logger.error("Внутрішня помилка API: %s", type(exc).__name__)
         return JSONResponse(status_code=500, content={"detail": "Внутрішня помилка сервера"})

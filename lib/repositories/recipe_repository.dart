@@ -1,6 +1,5 @@
 import '../models/recipe.dart';
 
-/// Контракт доступу до даних. Реалізацію можна замінити на SQLite.
 abstract interface class RecipeRepository {
   List<Recipe> getAll();
   Recipe? getById(String id);

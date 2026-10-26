@@ -23,7 +23,7 @@ class ShoppingService:
         return [self.read(item) for item in self.repository.for_week(user_id, monday(week))]
 
     def synchronize(self, user_id, weeks):
-        # Викликається лише всередині транзакції зміни рецепта/плану.
+
         for week in sorted(set(weeks)):
             amounts = {}
             for slot in self.plans.between(user_id, week, shift(week, 6)):
@@ -40,7 +40,7 @@ class ShoppingService:
             previous = {item.aggregation_key: item for item in self.repository.for_week(user_id, week) if not item.is_manual}
             for key, (name, quantity, unit) in amounts.items():
                 if quantity is not None:
-                    # Поточна схема SQLite зберігає 6 знаків у канонічних г/мл/шт.
+
                     quantity = quantity.quantize(Decimal("0.000001"), rounding=ROUND_HALF_UP)
                     if quantity <= 0:
                         raise DomainError(422, "Розрахована кількість продукту надто мала для точності сховища")
@@ -81,7 +81,7 @@ class ShoppingService:
                 values = {"week_start": item.week_start, "ingredient_name": item.ingredient_name,
                     "quantity": item.quantity, "unit": item.unit, "category": item.category}
                 values.update({key: value for key, value in changes.items() if key != "is_purchased"})
-                # Перевіряємо результат часткового оновлення, а не лише передані поля.
+
                 try:
                     merged = ShoppingInput.model_validate(values)
                 except ValueError:

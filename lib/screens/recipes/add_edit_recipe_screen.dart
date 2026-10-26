@@ -201,7 +201,6 @@ class _AddEditRecipeScreenState extends State<AddEditRecipeScreen> {
                 keyboardDismissBehavior:
                     ScrollViewKeyboardDismissBehavior.onDrag,
                 padding: const EdgeInsets.all(20),
-                // Усі поля входять у Form, навіть коли нижні рядки поза екраном.
                 child: Form(
                   key: _form,
                   autovalidateMode: AutovalidateMode.onUserInteraction,

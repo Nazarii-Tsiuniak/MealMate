@@ -18,7 +18,6 @@ class MealMateDemoApp extends StatefulWidget {
 }
 
 class _MealMateDemoAppState extends State<MealMateDemoApp> {
-  // Одне сховище на весь поточний запуск. Перезапуск відновлює демо-дані.
   final _recipes = RecipeService.demo();
   final _nutritionSettings = NutritionSettingsService();
   late final MealPlanService _mealPlans;

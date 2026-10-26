@@ -1,5 +1,3 @@
-/// Імена маршрутів застосунку. Рецепти відкриваються з явною передачею
-/// спільного RecipeService; окремі сховища в маршрутах не створюються.
 abstract final class AppRoutes {
   static const login = '/login';
   static const register = '/register';

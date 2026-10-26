@@ -1,4 +1,3 @@
-// Лише перевірка Android Keystore. Не використовує й не змінює ключ JWT.
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 

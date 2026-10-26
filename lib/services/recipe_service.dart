@@ -7,7 +7,6 @@ import '../models/recipe_ingredient.dart';
 import '../repositories/recipe_repository.dart';
 import 'recipe_validation.dart';
 
-/// Бізнес-логіка та сповіщення UI. Єдиний репозиторій на запуск застосунку.
 class RecipeService extends ChangeNotifier {
   RecipeService(this._repository);
   factory RecipeService.demo() =>
@@ -25,7 +24,6 @@ class RecipeService extends ChangeNotifier {
   Future<bool> deleteAsync(String id) async => delete(id);
 
   Recipe save(Recipe recipe) {
-    // Нормалізуємо одиниці початкових даних (шт. → шт).
     final normalized = Recipe(
       id: recipe.id,
       name: recipe.name,

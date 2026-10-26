@@ -102,7 +102,6 @@ void main() {
       expect(restarted.forDate(today), isEmpty);
       restarted.dispose();
       plans.dispose();
-      // Від'єднаний сервіс більше не отримує сповіщень від рецептів.
       recipes.delete('salad');
       plans = MealPlanService.inMemory(recipes);
     },

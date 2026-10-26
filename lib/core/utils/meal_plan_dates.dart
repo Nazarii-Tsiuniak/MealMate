@@ -1,7 +1,6 @@
 abstract final class MealPlanDates {
   static DateTime day(DateTime date) =>
       DateTime(date.year, date.month, date.day);
-  // Календарні дні замість Duration: переходи літнього часу не зсувають дату.
   static DateTime shift(DateTime date, int days) =>
       DateTime(date.year, date.month, date.day + days);
   static DateTime monday(DateTime date) => shift(day(date), 1 - date.weekday);

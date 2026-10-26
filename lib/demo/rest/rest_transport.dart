@@ -7,7 +7,6 @@ class RestWireResponse {
   final String body;
 }
 
-/// Ін'єкція транспорту дозволяє тестувати відповіді без мережі.
 abstract interface class RestTransport {
   Future<RestWireResponse> send(String method, Uri uri, {String? body});
   void close();

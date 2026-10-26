@@ -2,7 +2,6 @@ import '../../models/recipe.dart';
 import '../../models/recipe_ingredient.dart';
 import '../../services/recipe_validation.dart';
 
-/// JSON-контракт лише демонстраційного API. Основні моделі не змінюємо.
 abstract final class RecipeJson {
   static Map<String, Object?> encode(Recipe recipe, {bool includeId = true}) =>
       {

@@ -1,7 +1,6 @@
 import '../models/recipe_ingredient.dart';
 import '../models/shopping_item.dart';
 
-/// Нормалізація назв не ототожнює різні продукти або несумісні одиниці.
 abstract final class ShoppingAggregation {
   static String name(String value) => value
       .trim()
@@ -116,7 +115,6 @@ abstract final class ShoppingAggregation {
         isManual: false,
       );
     }
-    // Канонічні г/мл використовуються для об'єднання; UI показує кг/л від 1000.
     return amounts.values.map((item) {
       final large =
           item.quantity != null &&

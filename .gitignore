@@ -53,3 +53,8 @@ backend/data/
 *.tmp
 .DS_Store
 Thumbs.db
+
+/docs/lab11/
+/QA_REPORT.md
+/CALORIES_STAGE1.md
+/backend/.pytest_tmp/

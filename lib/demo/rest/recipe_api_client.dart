@@ -22,7 +22,6 @@ class ApiResult<T> {
   final int statusCode;
 }
 
-/// Ізольований REST-клієнт: не використовує RecipeRepository основного застосунку.
 class RecipeApiClient {
   RecipeApiClient({
     required this.baseUrl,

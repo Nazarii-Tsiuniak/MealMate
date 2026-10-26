@@ -10,7 +10,6 @@ enum MealType {
   final String time;
 }
 
-/// Один рецепт для календарної дати й прийому їжі. Незалежний від Flutter.
 class MealPlan {
   MealPlan({
     required this.id,
@@ -24,6 +23,5 @@ class MealPlan {
   final MealType mealType;
   final String recipeId;
 
-  /// Кількість порцій, запланованих на цей прийом їжі.
   final double plannedServings;
 }

@@ -12,7 +12,6 @@ enum ShoppingCategory {
   final String label;
 }
 
-/// quantity == null означає «за смаком», без числової кількості й одиниці.
 class ShoppingItem {
   const ShoppingItem({
     required this.id,

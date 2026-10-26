@@ -28,5 +28,5 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.include_router(users.router, prefix="/api/v1")
     for router in (recipes.router, meal_plans.router, shopping.router, statistics.router):
         app.include_router(router, prefix="/api/v1")
-    # Таблиці створює лише Alembic, не запуск API.
+
     return app

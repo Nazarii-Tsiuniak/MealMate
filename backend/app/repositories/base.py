@@ -11,9 +11,9 @@ class Repository:
     @contextmanager
     def transaction(self):
         try:
-            # SQLite: серіалізуємо зміни до читання ресурсів і перерахунку покупок.
-            # Авторизація вже виконала SELECT; sqlite3 legacy mode ще не відкрив
-            # фізичну транзакцію для цього читання.
+
+
+
             self.session.connection().exec_driver_sql("BEGIN IMMEDIATE")
             yield
             self.session.commit()

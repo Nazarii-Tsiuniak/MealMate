@@ -1,4 +1,3 @@
-"""Реальні HTTP-запити до окремого процесу Uvicorn і повторний запуск."""
 import json
 import os
 import socket

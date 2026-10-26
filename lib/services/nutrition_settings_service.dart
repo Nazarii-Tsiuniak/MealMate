@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 
-/// Особиста ціль у пам’яті поточного запуску. 2000 — демонстраційний приклад.
 class NutritionSettingsService extends ChangeNotifier {
   bool get isRemote => false;
   Future<void> setDailyGoalAsync(int value) async => setDailyGoal(value);

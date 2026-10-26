@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-/// Тимчасовий вміст екранів першого етапу.
 class ScreenPlaceholder extends StatelessWidget {
   const ScreenPlaceholder({required this.title, super.key, this.child});
 

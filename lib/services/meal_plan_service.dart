@@ -7,7 +7,6 @@ import '../repositories/meal_plan_repository.dart';
 import 'recipe_service.dart';
 import 'nutrition_service.dart';
 
-/// Узгоджує план із єдиним джерелом рецептів і сповіщає обидва екрани.
 class MealPlanService extends ChangeNotifier {
   MealPlanService(this._repository, this.recipes) {
     _repository.removeMissingRecipes(
@@ -94,7 +93,6 @@ class MealPlanService extends ChangeNotifier {
     _repository.removeMissingRecipes(
       recipes.recipes.map((recipe) => recipe.id).toSet(),
     );
-    // Також оновлюємо назви, час і калорійність після редагування рецептів.
     notifyListeners();
   }
 

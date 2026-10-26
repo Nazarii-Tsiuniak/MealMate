@@ -32,7 +32,6 @@ class _LoginScreenState extends State<LoginScreen> {
     if (_busy || !_formKey.currentState!.validate()) return;
     FocusScope.of(context).unfocus();
     if (widget.auth == null) {
-      // Лише явно обраний локальний demo/UI-тест, без реальної сесії.
       _password.clear();
       Navigator.pushNamedAndRemoveUntil(context, AppRoutes.home, (_) => false);
       return;

@@ -168,7 +168,6 @@ void main() {
       expect(find.text('Рецептів не знайдено'), findsOneWidget);
       await tap(tester, find.byTooltip('Очистити пошук'));
       final source = recipes.findById('omelet')!;
-      // Створення через спільний сервіс негайно оновлює відкритий вибір рецептів.
       final fresh = recipes.save(
         Recipe(
           id: '',

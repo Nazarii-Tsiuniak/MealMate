@@ -1,4 +1,3 @@
-"""Запускає тимчасовий FastAPI та наскрізний Flutter API-тест без емулятора."""
 import os
 from pathlib import Path
 import secrets

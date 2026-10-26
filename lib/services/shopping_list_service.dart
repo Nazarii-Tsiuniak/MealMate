@@ -8,7 +8,6 @@ import '../repositories/shopping_list_repository.dart';
 import 'meal_plan_service.dart';
 import 'shopping_aggregation.dart';
 
-/// Єдиний список на тиждень; підписаний на той самий план і каталог рецептів.
 class ShoppingListService extends ChangeNotifier {
   ShoppingListService(
     this._repository,
@@ -136,8 +135,6 @@ class ShoppingListService extends ChangeNotifier {
 
   void _synchronize() {
     if (!automaticGeneration) return;
-    // Враховуємо також тижні, які ще не відкривали на екрані покупок.
-    // Старі тижні потрібні для очищення після видалення останньої страви.
     for (final week in {..._sources.keys, ...plans.plannedWeeks}) {
       final generated = _generated(week);
       if (_sources[week] != _signature(generated)) {
@@ -172,8 +169,6 @@ class ShoppingListService extends ChangeNotifier {
 
   void clear() {
     _repository.replaceWeek(_selectedWeek, []);
-    // Не відновлюємо очищені продукти при навігації або незмінному плані.
-    // Наступна зміна потрібних інгредієнтів автоматично оновить цей тиждень.
     _sources[_selectedWeek] = _signature(_generated(_selectedWeek));
     notifyListeners();
   }

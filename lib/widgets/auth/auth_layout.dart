@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../core/theme/app_colors.dart';
 
-/// Спільне адаптивне компонування екранів авторизації.
 class AuthLayout extends StatelessWidget {
   const AuthLayout({
     required this.eyebrow,

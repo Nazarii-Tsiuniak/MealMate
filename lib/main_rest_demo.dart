@@ -7,7 +7,6 @@ import 'demo/rest/recipe_api_client.dart';
 import 'demo/rest/rest_demo_screen.dart';
 
 void main() {
-  // Демонстрація доступна тільки окремою debug-точкою входу.
   runApp(kDebugMode ? const RestDemoApp() : const MealMateApp());
 }
 

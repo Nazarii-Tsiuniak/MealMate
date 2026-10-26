@@ -12,7 +12,7 @@ class Security:
     def __init__(self, settings: Settings):
         self.settings = settings
         self.password_hash = PasswordHash.recommended()
-        # Порівнюємо хеш також для невідомого email, без раннього виходу.
+
         self._dummy_hash = self.hash_password(uuid4().hex)
 
     def hash_password(self, password: str) -> str:

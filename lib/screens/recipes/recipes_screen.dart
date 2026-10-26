@@ -40,7 +40,6 @@ class _RecipesScreenState extends State<RecipesScreen> {
     if (id != null && mounted) {
       await widget.service.query('', null);
       if (!mounted) return;
-      // Після створення показуємо новий рецепт навіть за попереднього фільтра.
       setState(() {
         _search.clear();
         _category = null;
@@ -233,8 +232,6 @@ class _RecipesScreenState extends State<RecipesScreen> {
           const SliverToBoxAdapter(child: SizedBox(height: 24)),
         ],
       ),
-      // Окрема зона резервує фактичну висоту кнопки й не перекриває список.
-      // Під час введення пошуку звільняємо місце для результатів.
       bottomNavigationBar: View.of(context).viewInsets.bottom > 0
           ? null
           : SafeArea(

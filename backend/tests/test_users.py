@@ -18,7 +18,7 @@ def test_profile_updates_are_isolated(client):
     assert client.get("/api/v1/users/me", headers=auth(client, "other@example.com")).json() == second
     assert login(client).status_code == 401
     assert login(client, email="new@example.com").status_code == 200
-    # Чинний JWT ідентифікує користувача за id, не старим email.
+
     assert client.get("/api/v1/users/me", headers=headers).json()["email"] == "new@example.com"
 
 

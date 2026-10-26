@@ -1,7 +1,6 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../../repositories/token_store.dart';
 
-/// Android Keystore: зберігаємо лише JWT, ніколи пароль.
 class SecureTokenStore implements TokenStore {
   const SecureTokenStore();
   static const _storage = FlutterSecureStorage(aOptions: AndroidOptions());

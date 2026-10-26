@@ -3,7 +3,6 @@ import 'package:mealmate/data/demo/recipe_demo_data.dart';
 import 'package:mealmate/demo/rest/recipe_api_client.dart';
 import 'package:mealmate/demo/rest/recipe_json.dart';
 
-/// Реальні HTTP-запити до вже запущеного локального сервера.
 Future<void> main(List<String> args) async {
   final client = RecipeApiClient(
     baseUrl: Uri.parse(args.isEmpty ? 'http://127.0.0.1:8080' : args.single),

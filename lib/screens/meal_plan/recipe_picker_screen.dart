@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../../services/recipe_service.dart';
 import '../../widgets/recipes/recipe_card.dart';
 
-/// Показує актуальне джерело через сервіс, без власної копії каталогу.
 class RecipePickerScreen extends StatefulWidget {
   const RecipePickerScreen({required this.recipes, super.key});
   final RecipeService recipes;
@@ -35,8 +34,6 @@ class _RecipePickerScreenState extends State<RecipePickerScreen> {
                     _normalize(recipe.name).contains(_normalize(_search.text)),
               )
               .toList();
-          // Пошук теж прокручується: клавіатура не перекриває результати
-          // навіть у горизонтальній орієнтації та з великим шрифтом.
           return CustomScrollView(
             keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             slivers: [

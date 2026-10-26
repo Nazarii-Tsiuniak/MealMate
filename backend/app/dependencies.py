@@ -41,7 +41,7 @@ def current_user(credentials: Annotated[HTTPAuthorizationCredentials | None, Dep
     return service.authenticate(credentials.credentials)
 
 
-# Предметні сервіси мають спільні репозиторії та одну транзакцію на запит.
+
 def get_domain_repositories(session: Annotated[Session, Depends(get_session)]):
     from app.repositories.recipe_repository import RecipeRepository
     from app.repositories.meal_plan_repository import MealPlanRepository

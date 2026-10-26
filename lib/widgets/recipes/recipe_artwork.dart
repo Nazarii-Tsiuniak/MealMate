@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../../core/theme/app_colors.dart';
 import '../../models/recipe.dart';
 
-/// Спільна тематична іконка для каталогу та деталей.
 class RecipeArtwork extends StatelessWidget {
   const RecipeArtwork({required this.category, this.size = 58, super.key});
   final RecipeCategory category;

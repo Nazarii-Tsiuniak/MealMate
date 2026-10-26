@@ -1,7 +1,6 @@
 import '../../models/recipe.dart';
 import '../../models/recipe_ingredient.dart';
 
-/// Тимчасові рецепти. Калорійність орієнтовна, на одну порцію.
 abstract final class RecipeDemoData {
   static const recipes = [
     Recipe(

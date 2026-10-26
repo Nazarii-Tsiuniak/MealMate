@@ -1,4 +1,3 @@
-/// Перевірки введення для форм; не виконують авторизацію.
 abstract final class AuthValidators {
   static String? name(String? value) {
     if (value == null || value.trim().isEmpty) return 'Введіть ім’я';

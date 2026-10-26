@@ -3,7 +3,6 @@ import '../../repositories/recipe_repository.dart';
 import '../api/api_client.dart';
 import '../api/backend_json.dart';
 
-/// Синхронні читання — лише кеш підтверджених сервером даних; зміни — async HTTP.
 class ApiRecipeRepository implements RecipeRepository {
   ApiRecipeRepository(this.api);
   final ApiClient api;

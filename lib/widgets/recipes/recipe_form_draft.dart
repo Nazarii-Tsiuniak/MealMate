@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../models/recipe_ingredient.dart';
 
-/// Контролери редагованих рядків належать лише формі, не сховищу.
 class IngredientDraft {
   IngredientDraft([RecipeIngredient? source])
     : name = TextEditingController(text: source?.name ?? ''),

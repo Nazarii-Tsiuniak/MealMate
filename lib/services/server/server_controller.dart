@@ -9,7 +9,6 @@ import '../../models/recipe.dart';
 import '../auth_service.dart';
 import 'server_services.dart';
 
-/// Кеші — лише знімки сервера. Один координатор оновлює залежні вкладки.
 class ServerController extends ChangeNotifier {
   ServerController(this.auth, {DateTime? today})
     : _clock = (() => today ?? DateTime.now()) {
@@ -126,7 +125,6 @@ class ServerController extends ChangeNotifier {
     _notify();
     try {
       final result = await action();
-      // Після підтвердженої зміни помилка GET не має спричинити повторний POST.
       try {
         await _reload();
       } catch (e) {

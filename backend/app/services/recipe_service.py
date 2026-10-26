@@ -25,7 +25,7 @@ class RecipeService:
 
     def list(self, user_id, search=None, category=None):
         recipes = self.repository.all(user_id, category)
-        # SQLite lower() не виконує Unicode case folding для українських назв.
+
         if search and search.strip():
             key = normalize_name(search)
             recipes = [recipe for recipe in recipes if key in normalize_name(recipe.name)]

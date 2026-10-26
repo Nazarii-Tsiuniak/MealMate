@@ -61,7 +61,7 @@ class Recipe(Base):
     description: Mapped[str] = mapped_column(Text, default="", server_default="")
     category: Mapped[str] = mapped_column(String(20))
     preparation_minutes: Mapped[int] = mapped_column(Integer)
-    # Значення на одну порцію, не на весь рецепт. NULL означає невідоме.
+
     calories: Mapped[int | None] = mapped_column(Integer)
     servings: Mapped[int] = mapped_column(Integer)
     user: Mapped[User] = relationship(back_populates="recipes")

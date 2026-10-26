@@ -2,7 +2,6 @@ import '../core/utils/meal_plan_dates.dart';
 import '../models/meal_plan.dart';
 import 'meal_plan_service.dart';
 
-/// Сума лише відомих значень. Невідома калорійність не стає нулем.
 class DailyNutrition {
   DailyNutrition(
     this.date,
@@ -43,7 +42,6 @@ class WeeklyNutrition {
       days.fold(0.0, (sum, day) => sum + day.knownCalories) / 7;
 }
 
-/// Читає актуальні рецепти й план, не зберігає другу копію даних.
 class NutritionService {
   const NutritionService(this.plans);
   final MealPlanService plans;
