@@ -1,0 +1,55 @@
+classDiagram
+  class RecipeRouter {
+    create(data, user, service)
+    update(id, data, user, service)
+    delete(id, user, service)
+  }
+  class MealPlanRouter {
+    assign(data, user, service)
+    delete(id, user, service)
+  }
+  class RecipeService {
+    find(user_id, recipe_id)
+    read(recipe)
+    list(user_id, search, category)
+    save(user_id, data, recipe_id)
+    delete(user_id, recipe_id)
+  }
+  class MealPlanService {
+    list(user_id, start, end)
+    assign(user_id, data)
+    delete(user_id, plan_id)
+  }
+  class RecipeRepository {
+    transaction()
+    find(user_id, id)
+    save(user_id, data, normalize, recipe)
+    delete(user_id, id)
+  }
+  class MealPlanRepository {
+    transaction()
+    between(user_id, start, end)
+    recipe_dates(user_id, recipe_id)
+    assign(user_id, data)
+    find(user_id, id)
+    delete(slot)
+  }
+  class ShoppingService {
+    synchronize(user_id, weeks)
+  }
+  class NutritionService {
+    daily(user, date)
+    weekly(user, start)
+  }
+  RecipeRouter --> RecipeService
+  MealPlanRouter --> MealPlanService
+  RecipeService --> RecipeRepository
+  RecipeService --> MealPlanRepository : affected weeks
+  RecipeService --> ShoppingService : synchronize in transaction
+  MealPlanService --> MealPlanRepository
+  MealPlanService --> RecipeRepository : ownership check
+  MealPlanService --> ShoppingService : synchronize in transaction
+  ShoppingService --> MealPlanRepository
+  NutritionService --> MealPlanRepository
+  note for RecipeService "Recipe CRUD also coordinates plan and shopping"
+  note for MealPlanService "Meal CRUD also coordinates recipe and shopping"

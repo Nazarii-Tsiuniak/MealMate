@@ -55,18 +55,21 @@ def get_shopping_service(repositories=Depends(get_domain_repositories)):
     return ShoppingService(shopping, plans)
 
 
-def get_recipe_service(repositories=Depends(get_domain_repositories), shopping=Depends(get_shopping_service)):
+def get_recipe_service(repositories=Depends(get_domain_repositories)):
     from app.services.recipe_service import RecipeService
-    recipes, plans, _ = repositories
-    return RecipeService(recipes, plans, shopping)
+    return RecipeService(repositories[0])
 
 
-def get_meal_plan_service(repositories=Depends(get_domain_repositories), shopping=Depends(get_shopping_service)):
+def get_meal_plan_service(repositories=Depends(get_domain_repositories)):
     from app.services.meal_plan_service import MealPlanService
-    recipes, plans, _ = repositories
-    return MealPlanService(plans, recipes, shopping)
+    return MealPlanService(repositories[1])
 
 
 def get_nutrition_service(repositories=Depends(get_domain_repositories)):
     from app.services.nutrition_service import NutritionService
     return NutritionService(repositories[1])
+
+
+def get_meal_planning_facade(recipes=Depends(get_recipe_service), plans=Depends(get_meal_plan_service), shopping=Depends(get_shopping_service)):
+    from app.services.meal_planning_facade import MealPlanningFacade
+    return MealPlanningFacade(recipes, plans, shopping)

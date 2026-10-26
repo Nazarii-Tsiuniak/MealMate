@@ -1,0 +1,21 @@
+sequenceDiagram
+  participant Router as PUT /meal-plans
+  participant Facade as MealPlanningFacade
+  participant Tx as Repository.transaction
+  participant Recipes as RecipeService
+  participant Plans as MealPlanRepository
+  participant Shopping as ShoppingService
+  Router->>Facade: assign_meal(current_user.id, data)
+  Facade->>Tx: BEGIN IMMEDIATE
+  Facade->>Recipes: find(user_id, recipe_id)
+  Recipes-->>Facade: owned recipe or 404
+  Facade->>Plans: assign(user_id, data)
+  Facade->>Shopping: synchronize(user_id, affected week)
+  alt success
+    Facade->>Facade: MealPlanRead.model_validate(slot)
+    Facade->>Tx: COMMIT
+    Facade-->>Router: MealPlanRead
+  else ownership / sync / serialization error
+    Facade->>Tx: ROLLBACK
+    Facade-->>Router: existing error handling
+  end

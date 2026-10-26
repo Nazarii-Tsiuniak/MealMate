@@ -3,12 +3,15 @@ from typing import Annotated
 from uuid import UUID
 from fastapi import APIRouter, Depends, Response
 from app.database.models import User
-from app.dependencies import current_user, get_meal_plan_service
+from app.dependencies import current_user, get_meal_planning_facade, get_meal_plan_service
 from app.schemas.meal_plan import MealPlanInput, MealPlanRead
 from app.services.meal_plan_service import MealPlanService
 from app.services.domain_utils import monday, shift
 
+from app.services.meal_planning_facade import MealPlanningFacade
+
 router = APIRouter(prefix="/meal-plans", tags=["План харчування"])
+Facade = Annotated[MealPlanningFacade, Depends(get_meal_planning_facade)]
 CurrentUser = Annotated[User, Depends(current_user)]
 Service = Annotated[MealPlanService, Depends(get_meal_plan_service)]
 
@@ -21,11 +24,11 @@ def plans(user: CurrentUser, service: Service, start_date: Date | None = None, e
 
 
 @router.put("", response_model=MealPlanRead, summary="Додати або замінити страву в одному слоті")
-def assign(data: MealPlanInput, user: CurrentUser, service: Service):
-    return service.assign(user.id, data)
+def assign(data: MealPlanInput, user: CurrentUser, facade: Facade):
+    return facade.assign_meal(user.id, data)
 
 
 @router.delete("/{plan_id}", status_code=204, summary="Прибрати страву з плану")
-def delete(plan_id: UUID, user: CurrentUser, service: Service):
-    service.delete(user.id, str(plan_id))
+def delete(plan_id: UUID, user: CurrentUser, facade: Facade):
+    facade.delete_meal(user.id, str(plan_id))
     return Response(status_code=204)

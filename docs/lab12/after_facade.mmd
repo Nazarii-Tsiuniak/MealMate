@@ -1,0 +1,65 @@
+classDiagram
+  class RecipeRouter {
+    recipes(user, service)
+    details(id, user, service)
+    create(data, user, facade)
+    update(id, data, user, facade)
+    delete(id, user, facade)
+  }
+  class MealPlanRouter {
+    plans(user, service, start, end)
+    assign(data, user, facade)
+    delete(id, user, facade)
+  }
+  class MealPlanningFacade {
+    save_recipe(user_id, data, recipe_id) RecipeRead
+    delete_recipe(user_id, recipe_id)
+    assign_meal(user_id, data) MealPlanRead
+    delete_meal(user_id, plan_id)
+    _recipe_weeks(user_id, recipe_id)
+  }
+  class RecipeService {
+    find(user_id, recipe_id)
+    read(recipe) RecipeRead
+    list(user_id, search, category)
+    details(user_id, recipe_id)
+  }
+  class MealPlanService {
+    list(user_id, start, end)
+    find(user_id, plan_id)
+  }
+  class RecipeRepository {
+    transaction()
+    find(user_id, id)
+    save(user_id, data, normalize, recipe)
+    delete(user_id, id)
+  }
+  class MealPlanRepository {
+    transaction()
+    recipe_dates(user_id, recipe_id)
+    between(user_id, start, end)
+    find(user_id, id)
+    assign(user_id, data)
+    delete(slot)
+  }
+  class ShoppingService {
+    synchronize(user_id, weeks)
+  }
+  class NutritionService {
+    daily(user, date)
+    weekly(user, start)
+  }
+  RecipeRouter --> RecipeService : reads
+  MealPlanRouter --> MealPlanService : reads
+  RecipeRouter --> MealPlanningFacade : writes
+  MealPlanRouter --> MealPlanningFacade : writes
+  MealPlanningFacade --> RecipeService : ownership and serialization
+  MealPlanningFacade --> MealPlanService : plan ownership
+  MealPlanningFacade --> ShoppingService : affected weeks only
+  RecipeService --> RecipeRepository
+  MealPlanService --> MealPlanRepository
+  MealPlanningFacade --> RecipeRepository : transactional recipe writes
+  MealPlanningFacade --> MealPlanRepository : transactional plan writes
+  ShoppingService --> MealPlanRepository
+  NutritionService --> MealPlanRepository
+  note for MealPlanningFacade "One existing Session; write + sync + serialize before commit"
