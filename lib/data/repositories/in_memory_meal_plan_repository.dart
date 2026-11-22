@@ -3,6 +3,12 @@ import '../../models/meal_plan.dart';
 import '../../repositories/meal_plan_repository.dart';
 
 class InMemoryMealPlanRepository implements MealPlanRepository {
+  InMemoryMealPlanRepository([Iterable<MealPlan> initial = const []]) {
+    for (final entry in initial) {
+      _items[(entry.date, entry.mealType)] = entry;
+    }
+  }
+
   final Map<(DateTime, MealType), MealPlan> _items = {};
   int _sequence = 0;
   @override
@@ -21,11 +27,7 @@ class InMemoryMealPlanRepository implements MealPlanRepository {
     String recipeId, {
     double plannedServings = 1,
   }) {
-    if (!plannedServings.isFinite ||
-        plannedServings <= 0 ||
-        plannedServings > 1000) {
-      throw ArgumentError('Вкажіть кількість порцій від 0 до 1000 (більше 0)');
-    }
+    MealPlan.validateServings(plannedServings);
     if (recipeId.trim().isEmpty) throw ArgumentError('Рецепт не вибрано');
     final key = (MealPlanDates.day(date), type);
     final item = MealPlan(

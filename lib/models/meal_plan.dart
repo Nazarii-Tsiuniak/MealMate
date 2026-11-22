@@ -11,6 +11,12 @@ enum MealType {
 }
 
 class MealPlan {
+  static void validateServings(double value) {
+    if (!value.isFinite || value <= 0 || value > 1000) {
+      throw ArgumentError('Вкажіть кількість порцій від 0 до 1000 (більше 0)');
+    }
+  }
+
   MealPlan({
     required this.id,
     required DateTime date,

@@ -2,6 +2,36 @@ import '../models/recipe.dart';
 import '../models/recipe_ingredient.dart';
 
 abstract final class RecipeValidation {
+  static Recipe prepare(Recipe recipe) {
+    final normalized = Recipe(
+      id: recipe.id,
+      name: recipe.name.trim(),
+      description: recipe.description.trim(),
+      category: recipe.category,
+      preparationMinutes: recipe.preparationMinutes,
+      calories: recipe.calories,
+      servings: recipe.servings,
+      ingredients: List.unmodifiable(
+        recipe.ingredients
+            .map(
+              (item) => RecipeIngredient(
+                name: item.name.trim(),
+                quantity: item.quantity,
+                unit: item.unit?.replaceAll('.', ''),
+                note: item.note,
+              ),
+            )
+            .toList(growable: false),
+      ),
+      preparationSteps: List.unmodifiable(
+        recipe.preparationSteps.map((step) => step.trim()),
+      ),
+    );
+    final error = RecipeValidation.recipe(normalized);
+    if (error != null) throw ArgumentError(error);
+    return normalized;
+  }
+
   static String? requiredText(String? value) =>
       value == null || value.trim().isEmpty ? 'Заповніть це поле' : null;
 

@@ -58,3 +58,10 @@ Thumbs.db
 /QA_REPORT.md
 /CALORIES_STAGE1.md
 /backend/.pytest_tmp/
+
+/exports/
+
+*.p12
+*.pfx
+android/offline-key.properties
+android/signing/

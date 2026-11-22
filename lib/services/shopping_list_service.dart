@@ -14,7 +14,17 @@ class ShoppingListService extends ChangeNotifier {
     this.plans, {
     DateTime? today,
     this.automaticGeneration = true,
-  }) : _selectedWeek = MealPlanDates.monday(today ?? DateTime.now()) {
+    this.persistentRemovals = false,
+    Map<DateTime, String> initialSources = const {},
+    Map<DateTime, Set<String>> initialRemoved = const {},
+    int initialSequence = 0,
+  }) : _sources = Map.of(initialSources),
+       _removed = {
+         for (final entry in initialRemoved.entries)
+           entry.key: Set.of(entry.value),
+       },
+       _sequence = initialSequence,
+       _selectedWeek = MealPlanDates.monday(today ?? DateTime.now()) {
     _synchronize();
     plans.addListener(_planChanged);
   }
@@ -28,7 +38,14 @@ class ShoppingListService extends ChangeNotifier {
   );
   final ShoppingListRepository _repository;
   final MealPlanService plans;
-  final Map<DateTime, String> _sources = {};
+  final Map<DateTime, String> _sources;
+  final Map<DateTime, Set<String>> _removed;
+  final bool persistentRemovals;
+  Map<DateTime, String> get sourceSignatures => Map.unmodifiable(_sources);
+  Map<DateTime, Set<String>> get removedKeys => {
+    for (final e in _removed.entries) e.key: Set.unmodifiable(e.value),
+  };
+  int get sequence => _sequence;
   DateTime _selectedWeek;
   final bool automaticGeneration;
   bool get isRemote => !automaticGeneration;
@@ -55,7 +72,7 @@ class ShoppingListService extends ChangeNotifier {
     required double? quantity,
     required String? unit,
   }) async => updateManual(week: week, id: id, quantity: quantity, unit: unit);
-  int _sequence = 0;
+  int _sequence;
   DateTime get selectedWeek => _selectedWeek;
   List<ShoppingItem> forWeek(DateTime week) => _repository.forWeek(week);
   List<ShoppingItem> get items => forWeek(_selectedWeek);
@@ -70,26 +87,34 @@ class ShoppingListService extends ChangeNotifier {
 
   List<ShoppingItem> _generated(DateTime week) =>
       ShoppingAggregation.ingredients(
-        plans.forWeek(week).expand((entry) {
-          final recipe = plans.recipes.findById(entry.recipeId);
-          if (recipe == null) return const <RecipeIngredient>[];
-          final servings = recipe.servings;
-          if (servings == null || servings <= 0) {
-            throw StateError('У рецепті не вказано коректну кількість порцій');
-          }
-          final factor = entry.plannedServings / servings;
-          return recipe.ingredients.map(
-            (ingredient) => RecipeIngredient(
-              name: ingredient.name,
-              quantity: ingredient.quantity == null
-                  ? null
-                  : ingredient.quantity! * factor,
-              unit: ingredient.unit,
-              note: ingredient.note,
-            ),
-          );
-        }),
-      );
+            plans.forWeek(week).expand((entry) {
+              final recipe = plans.recipes.findById(entry.recipeId);
+              if (recipe == null) return const <RecipeIngredient>[];
+              final servings = recipe.servings;
+              if (servings == null || servings <= 0) {
+                throw StateError(
+                  'У рецепті не вказано коректну кількість порцій',
+                );
+              }
+              final factor = entry.plannedServings / servings;
+              return recipe.ingredients.map(
+                (ingredient) => RecipeIngredient(
+                  name: ingredient.name,
+                  quantity: ingredient.quantity == null
+                      ? null
+                      : ingredient.quantity! * factor,
+                  unit: ingredient.unit,
+                  note: ingredient.note,
+                ),
+              );
+            }),
+          )
+          .where(
+            (item) =>
+                !persistentRemovals ||
+                !(_removed[week]?.contains(item.id) ?? false),
+          )
+          .toList();
   String _signature(List<ShoppingItem> items) {
     final sorted = [...items]..sort((a, b) => a.id.compareTo(b.id));
     return jsonEncode(
@@ -160,6 +185,20 @@ class ShoppingListService extends ChangeNotifier {
   }
 
   void remove(String id) {
+    if (persistentRemovals) {
+      for (final item in items.where(
+        (item) => item.id == id && !item.isManual,
+      )) {
+        (_removed[_selectedWeek] ??= {}).add(
+          ShoppingAggregation.key(
+            item.ingredientName,
+            item.unit,
+            item.quantity,
+          ),
+        );
+      }
+      _sources[_selectedWeek] = _signature(_generated(_selectedWeek));
+    }
     _repository.replaceWeek(
       _selectedWeek,
       items.where((item) => item.id != id).toList(),
@@ -168,6 +207,11 @@ class ShoppingListService extends ChangeNotifier {
   }
 
   void clear() {
+    if (persistentRemovals) {
+      (_removed[_selectedWeek] ??= {}).addAll(
+        _generated(_selectedWeek).map((item) => item.id),
+      );
+    }
     _repository.replaceWeek(_selectedWeek, []);
     _sources[_selectedWeek] = _signature(_generated(_selectedWeek));
     notifyListeners();

@@ -28,14 +28,42 @@ class MealPlanService extends ChangeNotifier {
     MealType type,
     String id, {
     double plannedServings = 1,
-  }) async => assign(date, type, id, plannedServings: plannedServings);
-  Future<void> removeAsync(DateTime date, MealType type) async =>
+  }) async {
+    final repository = _repository;
+    if (repository is! AsyncMealPlanRepository) {
+      return assign(date, type, id, plannedServings: plannedServings);
+    }
+    if (recipes.findById(id) == null) {
+      throw ArgumentError('Рецепт більше недоступний');
+    }
+    final result = await repository.assignAsync(
+      date,
+      type,
+      id,
+      plannedServings: plannedServings,
+    );
+    notifyListeners();
+    return result;
+  }
+
+  Future<void> removeAsync(DateTime date, MealType type) async {
+    final repository = _repository;
+    if (repository is! AsyncMealPlanRepository) {
       remove(date, type);
+      return;
+    }
+    if (await repository.removeAsync(date, type)) notifyListeners();
+  }
+
   Future<void> setServingsAsync(
     DateTime date,
     MealType type,
     double servings,
-  ) async => setServings(date, type, servings);
+  ) async {
+    final current = slot(date, type);
+    if (current == null) throw ArgumentError('Спочатку додайте страву');
+    await assignAsync(date, type, current.recipeId, plannedServings: servings);
+  }
 
   List<MealPlan> forDate(DateTime date) => _repository.getByDate(date);
   MealPlan? slot(DateTime date, MealType type) =>

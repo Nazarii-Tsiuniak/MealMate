@@ -3,7 +3,6 @@ import 'package:flutter/foundation.dart';
 import '../data/demo/recipe_demo_data.dart';
 import '../data/repositories/in_memory_recipe_repository.dart';
 import '../models/recipe.dart';
-import '../models/recipe_ingredient.dart';
 import '../repositories/recipe_repository.dart';
 import 'recipe_validation.dart';
 
@@ -20,32 +19,27 @@ class RecipeService extends ChangeNotifier {
   List<Recipe> get visibleRecipes => recipes;
   Future<void> query(String search, RecipeCategory? category) async {}
   Future<void> loadDetails(String id) async {}
-  Future<Recipe> saveAsync(Recipe recipe) async => save(recipe);
-  Future<bool> deleteAsync(String id) async => delete(id);
+  Future<Recipe> saveAsync(Recipe recipe) async {
+    final repository = _repository;
+    if (repository is! AsyncRecipeRepository) return save(recipe);
+    final normalized = RecipeValidation.prepare(recipe);
+    final saved = normalized.id.isEmpty
+        ? await repository.createAsync(normalized)
+        : await repository.updateAsync(normalized);
+    notifyListeners();
+    return saved;
+  }
+
+  Future<bool> deleteAsync(String id) async {
+    final repository = _repository;
+    if (repository is! AsyncRecipeRepository) return delete(id);
+    final deleted = await repository.deleteAsync(id);
+    if (deleted) notifyListeners();
+    return deleted;
+  }
 
   Recipe save(Recipe recipe) {
-    final normalized = Recipe(
-      id: recipe.id,
-      name: recipe.name,
-      description: recipe.description,
-      category: recipe.category,
-      preparationMinutes: recipe.preparationMinutes,
-      calories: recipe.calories,
-      servings: recipe.servings,
-      ingredients: recipe.ingredients
-          .map(
-            (item) => RecipeIngredient(
-              name: item.name.trim(),
-              quantity: item.quantity,
-              unit: item.unit?.replaceAll('.', ''),
-              note: item.note,
-            ),
-          )
-          .toList(),
-      preparationSteps: recipe.preparationSteps,
-    );
-    final error = RecipeValidation.recipe(normalized);
-    if (error != null) throw ArgumentError(error);
+    final normalized = RecipeValidation.prepare(recipe);
     final saved = normalized.id.isEmpty
         ? _repository.create(normalized)
         : _repository.update(normalized);

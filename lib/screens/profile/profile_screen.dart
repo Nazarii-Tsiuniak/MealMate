@@ -1,12 +1,22 @@
 import 'package:flutter/material.dart';
 import '../../services/nutrition_settings_service.dart';
 import '../../services/auth_service.dart';
+import '../../services/local_profile_service.dart';
+import '../../models/local_profile.dart';
 import '../../core/utils/action_feedback.dart';
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({required this.settings, this.auth, super.key});
+  const ProfileScreen({
+    required this.settings,
+    this.auth,
+    this.localProfile,
+    this.dataActions,
+    super.key,
+  });
   final NutritionSettingsService settings;
   final AuthService? auth;
+  final LocalProfileService? localProfile;
+  final Widget? dataActions;
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
@@ -15,15 +25,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
   bool _busy = false;
   final _form = GlobalKey<FormState>();
   late final TextEditingController _goal;
+  late final TextEditingController _name;
   @override
   void initState() {
     super.initState();
+    _name = TextEditingController(text: widget.localProfile?.name ?? '');
     _goal = TextEditingController(text: widget.settings.dailyGoal.toString());
   }
 
   @override
   void dispose() {
     _goal.dispose();
+    _name.dispose();
     super.dispose();
   }
 
@@ -31,12 +44,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
     if (_busy || !_form.currentState!.validate()) return;
     setState(() => _busy = true);
     try {
-      await widget.settings.setDailyGoalAsync(int.parse(_goal.text.trim()));
+      if (widget.localProfile != null) {
+        await widget.localProfile!.save(
+          name: _name.text,
+          dailyGoal: int.parse(_goal.text.trim()),
+        );
+      } else {
+        await widget.settings.setDailyGoalAsync(int.parse(_goal.text.trim()));
+      }
       if (!mounted) return;
       FocusScope.of(context).unfocus();
       ScaffoldMessenger.of(context)
         ..hideCurrentSnackBar()
-        ..showSnackBar(const SnackBar(content: Text('Денну ціль збережено')));
+        ..showSnackBar(
+          SnackBar(
+            content: Text(
+              widget.localProfile == null
+                  ? 'Денну ціль збережено'
+                  : 'Профіль збережено',
+            ),
+          ),
+        );
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(
@@ -70,6 +98,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Text(widget.auth!.user!.email),
                 const SizedBox(height: 20),
               ],
+              if (widget.localProfile != null) ...[
+                TextFormField(
+                  key: const ValueKey('local-profile-name'),
+                  controller: _name,
+                  decoration: const InputDecoration(labelText: 'Ім’я'),
+                  textCapitalization: TextCapitalization.words,
+                  textInputAction: TextInputAction.next,
+                  validator: (value) {
+                    try {
+                      LocalProfile.validateName(value ?? '');
+                      return null;
+                    } on ArgumentError catch (error) {
+                      return error.message as String;
+                    }
+                  },
+                ),
+                const SizedBox(height: 24),
+              ],
               if (_busy) const LinearProgressIndicator(),
               const Text(
                 'Денна ціль калорій',
@@ -99,14 +145,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
               const SizedBox(height: 20),
               FilledButton(
                 onPressed: _busy ? null : _save,
-                child: const Text('Зберегти ціль'),
+                child: Text(
+                  widget.localProfile == null
+                      ? 'Зберегти ціль'
+                      : 'Зберегти зміни',
+                ),
               ),
               const SizedBox(height: 20),
               Text(
-                widget.settings.isRemote
+                widget.localProfile != null
+                    ? 'Профіль зберігається на цьому пристрої.'
+                    : widget.settings.isRemote
                     ? 'Ціль зберігається у вашому профілі на сервері.'
                     : 'Ціль зберігається до перезапуску застосунку.',
               ),
+              if (widget.dataActions != null) ...[
+                const SizedBox(height: 20),
+                widget.dataActions!,
+              ],
               if (widget.auth != null)
                 TextButton.icon(
                   onPressed: _busy

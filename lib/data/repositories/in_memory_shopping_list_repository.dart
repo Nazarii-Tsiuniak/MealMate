@@ -3,6 +3,13 @@ import '../../models/shopping_item.dart';
 import '../../repositories/shopping_list_repository.dart';
 
 class InMemoryShoppingListRepository implements ShoppingListRepository {
+  InMemoryShoppingListRepository([
+    Map<DateTime, List<ShoppingItem>> initial = const {},
+  ]) {
+    for (final entry in initial.entries) {
+      replaceWeek(entry.key, entry.value);
+    }
+  }
   final Map<DateTime, List<ShoppingItem>> _weeks = {};
   @override
   List<ShoppingItem> forWeek(DateTime week) =>

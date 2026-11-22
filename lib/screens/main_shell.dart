@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../widgets/main_navigation_bar.dart';
 import '../services/auth_service.dart';
+import '../services/local_profile_service.dart';
 import '../services/nutrition_settings_service.dart';
 import 'profile/profile_screen.dart';
 import '../services/recipe_service.dart';
@@ -21,10 +22,14 @@ class MainShell extends StatefulWidget {
     this.shoppingList,
     this.nutritionSettings,
     this.auth,
+    this.localProfile,
     this.statusBanner,
+    this.dataActions,
   }) : assert(initialIndex >= 0 && initialIndex < 4);
   final AuthService? auth;
+  final LocalProfileService? localProfile;
   final Widget? statusBanner;
+  final Widget? dataActions;
   final int initialIndex;
   final RecipeService? service;
   final MealPlanService? mealPlans;
@@ -91,8 +96,12 @@ class _MainShellState extends State<MainShell> {
   void _profile() {
     Navigator.of(context).push<void>(
       MaterialPageRoute(
-        builder: (_) =>
-            ProfileScreen(settings: _nutritionSettings, auth: widget.auth),
+        builder: (_) => ProfileScreen(
+          settings: _nutritionSettings,
+          auth: widget.auth,
+          localProfile: widget.localProfile,
+          dataActions: widget.dataActions,
+        ),
       ),
     );
   }
@@ -121,7 +130,8 @@ class _MainShellState extends State<MainShell> {
                   children: [
                     HomeScreen(
                       service: _mealPlans,
-                      userName: widget.auth?.user?.name,
+                      userName:
+                          widget.localProfile?.name ?? widget.auth?.user?.name,
                       shopping: _shopping,
                       nutritionSettings: _nutritionSettings,
                       onPlan: _openTodayPlan,
